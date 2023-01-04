@@ -50,7 +50,7 @@ model = application.model('Recording Writer Actions for Rhetorical Adjustment',
                   {'Reward': fields.String(required=True,
                                          description="--",
                                          help="--")})
-db = get_collection()
+# db = get_collection()
 
 check = 0
 @name_space.route("/activity")
@@ -243,7 +243,7 @@ class MainClass(Resource):
                     info = self.pasteHandler(info, cur, pre, 2, lineNum)
                 else:
                     info = self.pasteHandler(info, pre, cur, 1, lineNum)
-                db.activity.insert_one(info)
+                # db.activity.insert_one(info)
                 return {
                     "status": "Updated recent writing actions in doc",
                 }
@@ -358,7 +358,7 @@ class MainClass(Resource):
             elif state == 2:
               info.pop('state')
               info["copy"] = info.pop("cb")
-            db.activity.insert_one(info)
+            # db.activity.insert_one(info)
             # print(info)
 
             return {
