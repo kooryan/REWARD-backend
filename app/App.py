@@ -3,10 +3,31 @@ import sys
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
 from flask_restx import Api, Resource, fields
+from flask_wtf.csrf import CSRFProtect
 from nltk.tokenize import sent_tokenize, word_tokenize
 
 import nltk
 nltk.download('punkt')
+
+
+import pymongo
+def get_collection():
+    # Get connection info from environment variables
+    CONNECTION_STRING = os.getenv('CONNECTION_STRING')
+    DB_NAME = os.getenv('DB_NAME')
+    COLLECTION_NAME = os.getenv('COLLECTION_NAME')
+    
+    # Create a MongoClient
+    client = pymongo.MongoClient(CONNECTION_STRING)
+    try:
+        client.server_info() # validate connection string
+    except pymongo.errors.ServerSelectionTimeoutError:
+        raise TimeoutError("Invalid API for MongoDB connection string or timed out when attempting to connect")
+
+    db = client[DB_NAME]
+    return db[COLLECTION_NAME]
+
+
 
 application = Flask(__name__)
 app = Api(app=application,
@@ -15,17 +36,19 @@ app = Api(app=application,
           description="Record Writer Actions for Rhetorical Adjustments")
 
 name_space = app.namespace('ReWARD', description='Record writing activity')
-
 model = app.model('Recording Writer Actions for Rhetorical Adjustment',
                   {'Reward': fields.String(required=True,
                                          description="--",
                                          help="--")})
-application.config["MONGO_URI"] = 'mongodb://' + os.environ['MONGODB_USERNAME'] + ':' + os.environ['MONGODB_PASSWORD'] + '@' + os.environ['MONGODB_HOSTNAME'] + ':27017/' + os.environ['MONGODB_DATABASE']
-mongo = PyMongo(application)
-db = mongo.db
+csrf = CSRFProtect(app)
+# application.config["MONGO_URI"] = 'mongodb://' + os.environ['MONGODB_USERNAME'] + ':' + os.environ['MONGODB_PASSWORD'] + '@' + os.environ['MONGODB_HOSTNAME'] + ':27017/' + os.environ['MONGODB_DATABASE']
+# mongo = PyMongo(application)
+# db = mongo.db
+db = get_collection()
 
 check = 0
 @name_space.route("/activity")
+@csrf.exempt
 class MainClass(Resource):
 
     check = 0
@@ -344,4 +367,5 @@ class MainClass(Resource):
 if __name__ == "__main__":
     ENVIRONMENT_DEBUG = os.environ.get("APP_DEBUG", True)
     ENVIRONMENT_PORT = os.environ.get("APP_PORT", 5000)
-    application.run(host='0.0.0.0', port=ENVIRONMENT_PORT, debug=ENVIRONMENT_DEBUG)
+    # application.run(host='0.0.0.0', port=ENVIRONMENT_PORT, debug=ENVIRONMENT_DEBUG)
+    application.run()
