@@ -16,6 +16,10 @@ def get_collection():
     CONNECTION_STRING = os.getenv('CONNECTION_STRING')
     DB_NAME = os.getenv('DB_NAME')
     COLLECTION_NAME = os.getenv('COLLECTION_NAME')
+
+    print("CONNECTION STRING: ", CONNECTION_STRING)
+    print("DB NAME: ", DB_NAME)
+    print("COLLECTION NAME: ", COLLECTION_NAME)
     
     # Create a MongoClient
     client = pymongo.MongoClient(CONNECTION_STRING)
