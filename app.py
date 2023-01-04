@@ -1,5 +1,4 @@
-from os import environ
-#import os
+import os
 import sys
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
@@ -14,9 +13,10 @@ nltk.download('punkt')
 import pymongo
 def get_collection():
     # Get connection info from environment variables
-    CONNECTION_STRING = environ.get('CONNECTION_STRING')
-    DB_NAME = environ.get('DB_NAME')
-    COLLECTION_NAME = environ.get('COLLECTION_NAME')
+    print("STARTING AGAIN")
+    CONNECTION_STRING = os.getenv('CONNECTION_STRING')
+    DB_NAME = os.getenv('DB_NAME')
+    COLLECTION_NAME = os.getenv('COLLECTION_NAME')
 
     print("CONNECTION STRING: ", CONNECTION_STRING)
     print("DB NAME: ", DB_NAME)
