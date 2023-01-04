@@ -14,8 +14,8 @@ import pymongo
 def get_collection():
     # Get connection info from environment variables
     CONNECTION_STRING = os.getenv('CONNECTION_STRING')
-    DB_NAME = os.getenv('flaskdb')
-    COLLECTION_NAME = os.getenv('flaskdb')
+    DB_NAME = os.getenv('DB_NAME')
+    COLLECTION_NAME = os.getenv('COLLECTION_NAME')
     
     # Create a MongoClient
     client = pymongo.MongoClient(CONNECTION_STRING)
