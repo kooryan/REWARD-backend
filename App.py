@@ -30,6 +30,16 @@ def get_collection():
 
 
 application = Flask(__name__)
+
+if not 'WEBSITE_HOSTNAME' in os.environ:
+   # local development, where we'll use environment variables
+   print("Loading config.development.")
+   application.config.from_object('azureproject.development')
+else:
+   # production
+   print("Loading config.production.")
+   application.config.from_object('azureproject.production')
+
 app = Api(app=application,
           version="1.0",
           title="ReWARD",
@@ -365,7 +375,8 @@ class MainClass(Resource):
             name_space.abort(400, e.__doc__, status="Could not save information", statusCode="400")
 
 if __name__ == "__main__":
-    ENVIRONMENT_DEBUG = os.environ.get("APP_DEBUG", True)
-    ENVIRONMENT_PORT = os.environ.get("APP_PORT", 5000)
-    # application.run(host='0.0.0.0', port=ENVIRONMENT_PORT, debug=ENVIRONMENT_DEBUG)
+    # ENVIRONMENT_DEBUG = os.environ.get("APP_DEBUG", True)
+    # ENVIRONMENT_PORT = os.environ.get("APP_PORT", 5000)
+    # # application.run(host='0.0.0.0', port=ENVIRONMENT_PORT, debug=ENVIRONMENT_DEBUG)
+    # application.run()
     application.run()
