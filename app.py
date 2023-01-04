@@ -59,7 +59,6 @@ db = get_collection()
 
 check = 0
 @name_space.route("/activity")
-# @csrf.exempt
 class MainClass(Resource):
     
     check = 0
