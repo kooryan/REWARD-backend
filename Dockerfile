@@ -13,11 +13,11 @@ LABEL MAINTAINER="Ryan Koo kooryan03@gmail.com"
 ENV GROUP_ID=1000 \
     USER_ID=1000
 
-# WORKDIR /var/www/
+WORKDIR /var/www/
 
 ENV PYTHONUNBUFFERED=0
 
-# ADD . /var/www/
+ADD . /var/www/
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 RUN python -m nltk.downloader punkt
