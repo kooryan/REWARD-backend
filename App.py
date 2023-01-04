@@ -29,24 +29,24 @@ def get_collection():
 
 
 
-application = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 
 if not 'WEBSITE_HOSTNAME' in os.environ:
    # local development, where we'll use environment variables
    print("Loading config.development.")
-   application.config.from_object('azureproject.development')
+   app.config.from_object('azureproject.development')
 else:
    # production
    print("Loading config.production.")
-   application.config.from_object('azureproject.production')
+   app.config.from_object('azureproject.production')
 
-app = Api(app=application,
+application = Api(app=app,
           version="1.0",
           title="ReWARD",
           description="Record Writer Actions for Rhetorical Adjustments")
 
-name_space = app.namespace('ReWARD', description='Record writing activity')
-model = app.model('Recording Writer Actions for Rhetorical Adjustment',
+name_space = application.namespace('ReWARD', description='Record writing activity')
+model = application.model('Recording Writer Actions for Rhetorical Adjustment',
                   {'Reward': fields.String(required=True,
                                          description="--",
                                          help="--")})
@@ -61,7 +61,7 @@ check = 0
 @name_space.route("/activity")
 # @csrf.exempt
 class MainClass(Resource):
-
+    
     check = 0
     @app.doc(responses={200: 'OK', 400: 'Invalid Argument', 500: 'Mapping Key Error'},
              params={'activity': 'data from most recent writing activity',
@@ -380,4 +380,4 @@ if __name__ == "__main__":
     # ENVIRONMENT_PORT = os.environ.get("APP_PORT", 5000)
     # # application.run(host='0.0.0.0', port=ENVIRONMENT_PORT, debug=ENVIRONMENT_DEBUG)
     # application.run()
-    application.run()
+    app.run()
