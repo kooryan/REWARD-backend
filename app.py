@@ -50,7 +50,7 @@ model = app.model('Recording Writer Actions for Rhetorical Adjustment',
                   {'Reward': fields.String(required=True,
                                          description="--",
                                          help="--")})
-# db = get_collection()
+db = get_collection()
 
 check = 0
 @name_space.route("/activity")
