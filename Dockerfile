@@ -23,8 +23,8 @@ RUN pip install -r requirements.txt
 RUN python -m nltk.downloader punkt
 RUN pip install gunicorn
 
-WORKDIR /app/
-COPY . /app/
+WORKDIR /app
+COPY . /app
 
 RUN addgroup -g $GROUP_ID www
 RUN adduser -D -u $USER_ID -G www www -s /bin/sh
