@@ -5,5 +5,4 @@ flask-restful
 flask-restx
 nltk
 pymongo
-Flask-WTF
 gunicorn

@@ -29,7 +29,7 @@ def get_collection():
 
 
 
-app = Flask(__name__s)
+app = Flask(__name__)
 
 if not 'WEBSITE_HOSTNAME' in os.environ:
    # local development, where we'll use environment variables
@@ -50,11 +50,6 @@ model = application.model('Recording Writer Actions for Rhetorical Adjustment',
                   {'Reward': fields.String(required=True,
                                          description="--",
                                          help="--")})
-# csrf = CSRFProtect(app)
-
-# application.config["MONGO_URI"] = 'mongodb://' + os.environ['MONGODB_USERNAME'] + ':' + os.environ['MONGODB_PASSWORD'] + '@' + os.environ['MONGODB_HOSTNAME'] + ':27017/' + os.environ['MONGODB_DATABASE']
-# mongo = PyMongo(application)
-# db = mongo.db
 db = get_collection()
 
 check = 0
@@ -375,8 +370,4 @@ class MainClass(Resource):
             name_space.abort(400, e.__doc__, status="Could not save information", statusCode="400")
 
 if __name__ == "__main__":
-    # ENVIRONMENT_DEBUG = os.environ.get("APP_DEBUG", True)
-    # ENVIRONMENT_PORT = os.environ.get("APP_PORT", 5000)
-    # # application.run(host='0.0.0.0', port=ENVIRONMENT_PORT, debug=ENVIRONMENT_DEBUG)
-    # application.run()
     app.run()
