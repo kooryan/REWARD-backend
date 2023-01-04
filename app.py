@@ -29,7 +29,7 @@ def get_collection():
 
 
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 # if not 'WEBSITE_HOSTNAME' in os.environ:
 #    # local development, where we'll use environment variables
@@ -40,13 +40,13 @@ app = Flask(__name__)
 #    print("Loading config.production.")
 #    app.config.from_object('azureproject.production')
 
-application = Api(app=app,
+app = Api(app=application,
           version="1.0",
           title="ReWARD",
           description="Record Writer Actions for Rhetorical Adjustments")
 
-name_space = application.namespace('ReWARD', description='Record writing activity')
-model = application.model('Recording Writer Actions for Rhetorical Adjustment',
+name_space = app.namespace('ReWARD', description='Record writing activity')
+model = app.model('Recording Writer Actions for Rhetorical Adjustment',
                   {'Reward': fields.String(required=True,
                                          description="--",
                                          help="--")})
