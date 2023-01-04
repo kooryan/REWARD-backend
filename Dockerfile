@@ -34,4 +34,4 @@ COPY . /app
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
 USER appuser
 
-CMD [ "gunicorn", "-w", "4", "--bind", "0.0.0.0:5000"]
+CMD [ "gunicorn", "--bind", "0.0.0.0:5000", "app:app"]

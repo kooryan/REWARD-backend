@@ -3,7 +3,7 @@ import sys
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
 from flask_restx import Api, Resource, fields
-from flask_wtf.csrf import CSRFProtect
+# from flask_wtf.csrf import CSRFProtect
 from nltk.tokenize import sent_tokenize, word_tokenize
 
 import nltk
@@ -50,7 +50,8 @@ model = app.model('Recording Writer Actions for Rhetorical Adjustment',
                   {'Reward': fields.String(required=True,
                                          description="--",
                                          help="--")})
-csrf = CSRFProtect(app)
+# csrf = CSRFProtect(app)
+
 # application.config["MONGO_URI"] = 'mongodb://' + os.environ['MONGODB_USERNAME'] + ':' + os.environ['MONGODB_PASSWORD'] + '@' + os.environ['MONGODB_HOSTNAME'] + ':27017/' + os.environ['MONGODB_DATABASE']
 # mongo = PyMongo(application)
 # db = mongo.db
@@ -58,7 +59,7 @@ db = get_collection()
 
 check = 0
 @name_space.route("/activity")
-@csrf.exempt
+# @csrf.exempt
 class MainClass(Resource):
 
     check = 0
