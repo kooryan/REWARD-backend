@@ -31,14 +31,14 @@ def get_collection():
 
 app = Flask(__name__)
 
-if not 'WEBSITE_HOSTNAME' in os.environ:
-   # local development, where we'll use environment variables
-   print("Loading config.development.")
-   app.config.from_object('azureproject.development')
-else:
-   # production
-   print("Loading config.production.")
-   app.config.from_object('azureproject.production')
+# if not 'WEBSITE_HOSTNAME' in os.environ:
+#    # local development, where we'll use environment variables
+#    print("Loading config.development.")
+#    app.config.from_object('azureproject.development')
+# else:
+#    # production
+#    print("Loading config.production.")
+#    app.config.from_object('azureproject.production')
 
 application = Api(app=app,
           version="1.0",
