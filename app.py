@@ -29,7 +29,7 @@ def get_collection():
 
 
 
-app = Flask(__name__, static_folder='static')
+app = Flask(__name__)
 
 if not 'WEBSITE_HOSTNAME' in os.environ:
    # local development, where we'll use environment variables
@@ -58,14 +58,15 @@ model = application.model('Recording Writer Actions for Rhetorical Adjustment',
 db = get_collection()
 
 check = 0
-@name_space.route("/activity")
+# @name_space.route("/activity")
 # @csrf.exempt
-class MainClass(Resource):
+# class MainClass(Resource):
     
-    check = 0
-    @app.doc(responses={200: 'OK', 400: 'Invalid Argument', 500: 'Mapping Key Error'},
-             params={'activity': 'data from most recent writing activity',
-                     'timestamp': 'The time at which writer action was recorded'})
+#     check = 0
+# @app.doc(responses={200: 'OK', 400: 'Invalid Argument', 500: 'Mapping Key Error'},
+#              params={'activity': 'data from most recent writing activity',
+#                      'timestamp': 'The time at which writer action was recorded'})
+    @app.route("/activity", methods=['GET'])
     def get(self):
         try:
             summary = "retrieving the writing actions real time from user input into the overleaf editor"
@@ -80,10 +81,10 @@ class MainClass(Resource):
         except Exception as e:
             name_space.abort(400, e.__doc__, status="Could not retrieve information", statusCode="400")
 
-    @app.doc(responses={200: 'OK', 400: 'Invalid Argument', 500: 'Mapping Key Error'},
-             params={'activity': 'data from most recent writing activity',
-                     'timestamp': 'The time at which writer action was recorded'})
-    @app.expect(model)
+    # @app.doc(responses={200: 'OK', 400: 'Invalid Argument', 500: 'Mapping Key Error'},
+    #          params={'activity': 'data from most recent writing activity',
+    #                  'timestamp': 'The time at which writer action was recorded'})
+    # @app.expect(model)
     def findback(self, i, type, skip, text):
         back = ""
         check = 0
@@ -230,6 +231,7 @@ class MainClass(Resource):
         info["paste"] = info.pop("cb")
         return info
 
+    @app.route('/activity', methods=['POST'])
     def post(self):
         try:
             info = request.get_json(force=True)
@@ -374,6 +376,7 @@ class MainClass(Resource):
             name_space.abort(500, e.__doc__, status="Could not save information", statusCode="500")
         except Exception as e:
             name_space.abort(400, e.__doc__, status="Could not save information", statusCode="400")
+
 
 if __name__ == "__main__":
     # ENVIRONMENT_DEBUG = os.environ.get("APP_DEBUG", True)
