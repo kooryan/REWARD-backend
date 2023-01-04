@@ -23,15 +23,15 @@ RUN pip install -r requirements.txt
 RUN python -m nltk.downloader punkt
 RUN pip install gunicorn
 
-WORKDIR /app
-COPY . /app
+# WORKDIR /app
+# COPY . /app
 
 RUN addgroup -g $GROUP_ID www
 RUN adduser -D -u $USER_ID -G www www -s /bin/sh
 
 USER www
 
-RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
-USER appuser
+# RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
+# USER appuser
 
 CMD [ "gunicorn", "-w", "4" "--bind", "0.0.0.0:5000", "app"]
