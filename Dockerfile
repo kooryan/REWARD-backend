@@ -17,7 +17,7 @@ ENV GROUP_ID=1000 \
 
 ENV PYTHONUNBUFFERED=0
 
-ADD . /var/www/
+# ADD . /var/www/
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 RUN python -m nltk.downloader punkt
