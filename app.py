@@ -86,7 +86,7 @@ class MainClass(Resource):
     def findback(self, i, type, skip, text):
         back = ""
         check = 0
-        if (" " in text[i][1] or "\n" in text[i][1]) and (len(text[i][1]) > 1):
+        if ("\n" in text[i][1]) or (" " in text[i][1] and len(text[i][1]) > 1):
             return check, back
         for k in range(i + 1, len(text)):
             if text[k][0] == skip or len(text[k]) > 2:
@@ -118,7 +118,7 @@ class MainClass(Resource):
     def findfront(self, i, skip, text):
         front = ""
         check = 0
-        if (" " in text[i][1]) and (len(text[i][1]) > 1):
+        if ("\n" in text[i][1]) or (" " in text[i][1] and len(text[i][1]) > 1):
             return check, front
         for k in range(i - 1, -1, -1):
             if text[k][0] == skip:
@@ -246,11 +246,11 @@ class MainClass(Resource):
                 pos = self.countChar(i, text)
                 if check1 or check2:
                     swapword.append(
-                        '(' + str(lineNum) + ',' + str(pos) + ')' + ", " + front + text[i][1] + back + "->")
+                        '(' + str(lineNum) + ',' + str(pos-len(front)) + ')' + ", " + front + text[i][1] + back + "->")
                 elif front + back != "":
                     check2, front1 = self.findfront(i, -1, text)
                     check1, back1 = self.findback(i, -1, -1, text)
-                    changes.append('(' + str(lineNum) + ',' + str(pos) + ')' + ", " + front + text[i][
+                    changes.append('(' + str(lineNum) + ',' + str(pos-len(front)) + ')' + ", " + front + text[i][
                         1] + back + "->" + front1 + back1)
                 else:
                     changes.append('(' + str(lineNum) + ',' + str(pos) + ')' + ", " + text[i][1] + "---deleted")
@@ -260,7 +260,7 @@ class MainClass(Resource):
                 pos = self.countChar(i, text)
                 if front + back != "":
                     check1, back1 = self.findback(i, -1, -1, text)
-                    changes.append('(' + str(lineNum) + ',' + str(pos) + ')' + ", " + front + text[i][
+                    changes.append('(' + str(lineNum) + ',' + str(pos-len(front)) + ')' + ", " + front + text[i][
                         1] + back + "->" + front + back1)
                 else:
                     changes.append('(' + str(lineNum) + ',' + str(pos) + ')' + ", " + text[i][1] + "---deleted")
@@ -275,7 +275,7 @@ class MainClass(Resource):
                     check2, front = self.findfront(i, 1, text)
                     if front + back != "":
                         check2, front1 = self.findfront(i, -1, text)
-                        changes.append('(' + str(lineNum) + ',' + str(pos) + ')' + ", " + front1 + text[i][
+                        changes.append('(' + str(lineNum) + ',' + str(pos-len(front)) + ')' + ", " + front1 + text[i][
                             1] + back + "->" + front + back)
                     else:
                         changes.append('(' + str(lineNum) + ',' + str(pos) + ')' + ", " + text[i][1] + "---deleted")
@@ -287,7 +287,7 @@ class MainClass(Resource):
                 continue
             elif (text[i][0] == 1) and (0 < i < length - 1):
                 pos = self.countChar(i, text)
-                if i == length - 2 and (text[length - 1][1].isspace() or text[length - 1][1] == "\n"):
+                if i == length - 2 and (text[length - 1][1].isspace() or text[length - 1][1] == "\n") and swapword == []:
                     changes.append('(' + str(lineNum) + ',' + str(pos) + ')' + ", " + text[i][1] + "---added")
                 else:
                     check1, back = self.findback(i, 1, -1, text)
@@ -300,7 +300,7 @@ class MainClass(Resource):
                         check2, front1 = self.findfront(i, 1, text)
                         check1, back1 = self.findback(i, 1, 1, text)
                         changes.append(
-                            '(' + str(lineNum) + ',' + str(pos) + ')' + ", " + front1 + back1 + "->" + front +
+                            '(' + str(lineNum) + ',' + str(pos-len(front)) + ')' + ", " + front1 + back1 + "->" + front +
                             text[i][1] + back)
                     else:
                         changes.append('(' + str(lineNum) + ',' + str(pos) + ')' + ", " + text[i][1] + "---added")
@@ -311,7 +311,7 @@ class MainClass(Resource):
                 if front + back != "":
                     check1, back1 = self.findback(i, 1, 1, text)
                     changes.append(
-                        '(' + str(lineNum) + ',' + str(pos) + ')' + ", " + front + back1 + "->" + front + text[i][
+                        '(' + str(lineNum) + ',' + str(pos-len(front)) + ')' + ", " + front + back1 + "->" + front + text[i][
                             1] + back)
                 else:
                     changes.append('(' + str(lineNum) + ',' + str(pos) + ')' + ", " + text[i][1] + "---added")
@@ -330,7 +330,7 @@ class MainClass(Resource):
                     if front + back != "":
                         check1, back1 = self.findback(i, 1, 1, text)
                         changes.append(
-                            '(' + str(lineNum) + ',' + str(pos) + ')' + ", " + front + back + "->" + front +
+                            '(' + str(lineNum) + ',' + str(pos-len(front)) + ')' + ", " + front + back + "->" + front +
                             text[i][1] + back1)
                     else:
                         changes.append('(' + str(lineNum) + ',' + str(pos) + ')' + ", " + text[i][1] + "---added")
@@ -376,21 +376,17 @@ class MainClass(Resource):
                 changes = self.typeHandler(info)
                 info["changes"] = changes
 
-            if state == 0:
+            if state == 0 or state == 4:
                 info.pop('line')
-                info.pop("state")
                 info.pop("cb")
             elif state == 1:
                 info.pop('line')
-                info.pop("state")
                 info["cut"] = info.pop("cb")
             elif state == 2:
-                info.pop('state')
                 info.pop('copyLineNumbers')
                 info["copy"] = info.pop("cb")
             elif state == 3:
                 info.pop('line')
-                info.pop('state')
                 info["paste"] = info.pop("cb")
             info["ip address"] = request.remote_addr
             db.activity.insert_one(info)
