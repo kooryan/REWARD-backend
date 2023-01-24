@@ -389,6 +389,7 @@ class MainClass(Resource):
                 info.pop('line')
                 info["paste"] = info.pop("cb")
             info["ip address"] = request.remote_addr
+            info["project_id"] = request.path
             db.activity.insert_one(info)
 
             return {
