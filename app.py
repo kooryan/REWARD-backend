@@ -388,8 +388,8 @@ class MainClass(Resource):
             elif state == 3:
                 info.pop('line')
                 info["paste"] = info.pop("cb")
-            info["ip address"] = request.remote_addr
-            info["project_id"] = request.path
+            #info["ip_address"] = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
+            #info["project_id"] = request.path
             db.activity.insert_one(info)
 
             return {
