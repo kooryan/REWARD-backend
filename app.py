@@ -104,10 +104,17 @@ class MainClass(Resource):
                     check = 1
                 k += 1
             else:
-                idx = text[k][1].find(" ")
+                idx = -1
+                idx1 = text[k][1].find(" ")
                 idx2 = text[k][1].find("\n")
-                if idx > idx2 and (idx2 != -1):
+                if idx2 >= 0 > idx1:
                     idx = idx2
+                elif idx1 >= 0 > idx2:
+                    idx = idx1
+                elif idx1 > idx2 >= 0:
+                    idx = idx2
+                elif idx2 > idx1 >= 0:
+                    idx = idx1
                 if text[k][0] != 0:
                     text[k].append(1)
                 if idx == 0:
